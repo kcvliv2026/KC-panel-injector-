@@ -20,3 +20,13 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log('KCV PANEL SERVER ONLINE');
 });
+
+// ==== DEMO USERS ====
+const users = [
+  {
+    username: "admin", // Ito yung username
+    password: "$2a$10$...", // Ito yung encrypted password (bukas mo yung plain text version sa code mo)
+    accessKey: "KCV_DEMO_KEY123" // Minsan may access key pa
+  }
+];
+
