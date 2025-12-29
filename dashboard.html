@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  background: #000;
+  color: #00ffff;
+  font-family: Arial;
+}
+button {
+  padding: 10px;
+  margin: 5px;
+  background: #00ffff;
+  border: none;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<h2>⚡ ADMIN DASHBOARD</h2>
+<button onclick="loadUsers()">Load Users</button>
+<button onclick="toggleMaintenance()">Toggle Maintenance</button>
+<button onclick="logout()">Logout</button>
+
+<ul id="users"></ul>
+
+<script>
+const API = "http://localhost:3000";
+const token = localStorage.getItem("token");
+if (!token) location.href = "index.html";
+
+function loadUsers() {
+  fetch(API + "/admin/users", {
+    headers: { Authorization: "Bearer " + token }
+  })
+  .then(r => r.json())
+  .then(d => {
+    users.innerHTML = "";
+    d.users.forEach(u => {
+      users.innerHTML += `<li>${u.username} (${u.role})</li>`;
+    });
+  });
+}
+
+function toggleMaintenance() {
+  fetch(API + "/admin/maintenance", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token }
+  })
+  .then(r => r.json())
+  .then(d => alert("Maintenance: " + (d.maintenance ? "ON" : "OFF")));
+}
+
+function logout() {
+  localStorage.clear();
+  location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

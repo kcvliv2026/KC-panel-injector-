@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>KCV Panel Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  background: radial-gradient(circle, #00ffff, #000);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial;
+}
+.panel {
+  background: #000;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 25px #00ffff;
+  color: #00ffff;
+  width: 300px;
+}
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+button {
+  background: #00ffff;
+  border: none;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <h3>⚡ KCV PANEL</h3>
+  <div id="status">Checking server...</div>
+  <input id="username" placeholder="Username">
+  <input id="key" type="password" placeholder="Access Key">
+  <button onclick="login()">LOGIN</button>
+</div>
+
+<script>
+const API = "http://localhost:3000";
+
+fetch(API + "/status")
+.then(r => r.json())
+.then(d => {
+  document.getElementById("status").innerText =
+    d.maintenance ? "MAINTENANCE MODE" : "SERVER ONLINE";
+});
+
+function login() {
+  fetch(API + "/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      username: username.value,
+      key: key.value
+    })
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.success) {
+      localStorage.setItem("token", d.token);
+      window.location.href = "dashboard.html";
+    } else {
+      alert(d.message);
+    }
+  });
+}
+</script>
+
+</body>
+</html>
